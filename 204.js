@@ -1,4 +1,3 @@
-var options = { enableHighAccuracy: true, timeout: 100, maximumAge: 0 }
 var ourCoords = {
 	latitude: 47.624851,
 	longitude: -122.52099
@@ -6,23 +5,12 @@ var ourCoords = {
 
 window.onload = getMyLocation;
 
-// function getMyLocation() {
-//     if (navigator.geolocation) {
-//         var watchButton = document.getElementById("watch");
-//         watchButton.onclick = watchLocation;
-//         var clearWatchLocation = document.getElementById("clearWatch");
-//         clearWatchLocation.onclick = clearWatch;
-//     } else {
-//         alert("Oops, no geolocation support");
-//     }
-// }
-
 function getMyLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            displayLocation,
-            displayError,
-            options);
+        var watchButton = document.getElementById("watch");
+        watchButton.onclick = watchLocation;
+        var clearWatchLocation = document.getElementById("clearWatch");
+        clearWatchLocation.onclick = clearWatch;
     } else {
         alert("Oops, no geolocation support");
     }
@@ -35,7 +23,6 @@ function displayLocation(position) {
     var div = document.getElementById("location");
     div.innerHTML = "You are at Latitude: " + latitude + ", Longitude: " + longitude;
     div.innerHTML += " (with " + position.coords.accuracy + " meteres accuracy)";
-    div.innerHTML += "<br>Found in " + options.timeout + " milliseconds.";
 
     var km = computeDistance(position.coords, ourCoords);
 	var distance = document.getElementById("distance");
@@ -61,12 +48,6 @@ function displayError(error) {
     }
     var div = document.getElementById("location");
     div.innerHTML = errorMessage;
-    options.timeout += 100;
-    navigator.geolocation.getCurrentPosition (
-        displayLocation,
-        displayError,
-        options);
-    div.innerHTML += " ... checking again with timeout=" + options.timeout;
 }
 
 function computeDistance(startCoords,destCoords) {
@@ -132,7 +113,7 @@ function addMarker(map, latlong, title, content) {
 var watchId = null;
 
 function watchLocation() {
-   watchId = navigator.geolocation.watchPosition(displayLocation, displayError, options); 
+   watchId = navigator.geolocation.watchPosition(displayLocation, displayError); 
 }
 
 function clearWatch() {
